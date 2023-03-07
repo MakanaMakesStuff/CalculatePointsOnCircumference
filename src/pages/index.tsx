@@ -1,3 +1,4 @@
+import Circle from "@/components/Circle"
 import Head from "next/head"
 
 export default function Home() {
@@ -11,7 +12,8 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1>Welcome home!!</h1>
+        <h1>Calculate Arc Points on Circumference</h1>
+        <Circle radius={200} points={10} angle={45} />
       </main>
     </>
   )
