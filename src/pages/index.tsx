@@ -1,7 +1,28 @@
 import Circle from "@/components/Circle"
 import Head from "next/head"
+import { ChangeEvent, useState } from "react"
+import style from "../styles/pages/index.module.scss"
 
 export default function Home() {
+  const [settings, updateSettings] = useState<{
+    radius: number
+    points: number
+    angle: number
+    coordinates: { x: number; y: number }[]
+  }>({
+    radius: 150,
+    points: 10,
+    angle: 180,
+    coordinates: [],
+  })
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    updateSettings({
+      ...settings,
+      [e.currentTarget.name]: e.currentTarget.value,
+    })
+  }
+
   return (
     <>
       <Head>
@@ -11,9 +32,85 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main>
-        <h1>Calculate Arc Points on Circumference</h1>
-        <Circle radius={200} points={10} angle={45} />
+      <main className={style.page}>
+        <h2 className={style.title}>Calculate Arc Points on Circumference</h2>
+
+        <section>
+          <Circle
+            radius={settings.radius}
+            points={settings.points}
+            angle={settings.angle}
+            updateCoordinates={(coordinates: { x: number; y: number }[]) =>
+              updateSettings({
+                ...settings,
+                coordinates,
+              })
+            }
+            className={style.circleGraph}
+          />
+
+          <div className={style.controls}>
+            <label>
+              Points:
+              <input
+                type="range"
+                name="points"
+                id="points"
+                min={1}
+                max={50}
+                step={1}
+                onChange={handleChange}
+              />
+            </label>
+
+            <label>
+              Angle:
+              <input
+                type="range"
+                name="angle"
+                id="angle"
+                min={0}
+                max={360}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+        </section>
+
+        <section className={style.logs}>
+          <h3 className={style.label}>Coordinates</h3>
+
+          <hr />
+
+          <ul>
+            {settings.coordinates.map((coord, i) => {
+              return (
+                <li key={i}>
+                  <label
+                    className={
+                      i === 0
+                        ? style.start
+                        : i === settings.coordinates.length - 1
+                        ? style.end
+                        : ""
+                    }
+                  >
+                    {i === 0
+                      ? "Start"
+                      : i === settings.coordinates.length - 1
+                      ? "End"
+                      : `Coordinate ${i + 1}`}
+                    :
+                  </label>
+                  <br />
+                  <span>{`x position: ${Math.round(coord.x)}`}</span>
+                  <br />
+                  <span>{`y position: ${Math.round(coord.y)}`}</span>
+                </li>
+              )
+            })}
+          </ul>
+        </section>
       </main>
     </>
   )
