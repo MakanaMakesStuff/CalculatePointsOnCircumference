@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "engines": {
-    "node": "v16.14.2"
+    "node": "18.13.0"
   },
   "dependencies": {
     "@next/font": "13.1.4",
